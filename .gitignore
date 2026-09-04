@@ -1,0 +1,14 @@
+# Rust build output
+/target/
+
+# rustfmt backup files
+**/*.rs.bk
+
+# Editor swap and backup files
+*.swp
+*.swo
+*~
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
