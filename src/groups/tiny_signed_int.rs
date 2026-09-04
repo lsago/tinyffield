@@ -1,78 +1,58 @@
 use crate::group::Group;
 
-// represent internal value with an i8
-type Value = i8;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TinySignedIntElement {
-    value: Value,
-}
+pub struct TinySignedInt(i8);
 
-// just show value (i8) when being asked to display it
-impl std::fmt::Display for TinySignedIntElement {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.value)
+impl Group for TinySignedInt {
+    fn identity() -> Self {
+        Self(0)
     }
 }
 
-impl TinySignedIntElement {
-    pub fn new(value: Value) -> Self {
-        Self { value }
-    }
-}
-
-
-// our group (TinySignedInts) made with a set of elements (TinySignedIntElement)
-pub struct TinySignedInts;
-
-impl Group for TinySignedInts {
-    type Element = TinySignedIntElement;
-
-    fn identity() -> Self::Element {
-        TinySignedIntElement { value: 0 }
-    }
-
-    fn inverse(e: Self::Element) -> Self::Element {
-        TinySignedIntElement { value: e.value.wrapping_neg() }
-    }
-
-    fn op(lhs: Self::Element, rhs: Self::Element) -> Self::Element {
-        TinySignedIntElement {
-            value: lhs.value.wrapping_add(rhs.value),
-        }
-    }
-}
-
-// The op is a property of the group structure, not the element. So doing
-// TinySignedIntElement::new(3).op(...) would not make sense.
-// But
-impl std::ops::Add for TinySignedIntElement {
+impl std::ops::Add for TinySignedInt {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self {
-        <TinySignedInts as Group>::op(self, rhs)
+        Self(self.0.wrapping_add(rhs.0))
     }
 }
 
-impl TinySignedInts {
-    pub fn element(value: i8) -> TinySignedIntElement {
-        TinySignedIntElement { value }
+impl std::ops::Neg for TinySignedInt {
+    type Output = Self;
+
+    fn neg(self) -> Self {
+        Self(self.0.wrapping_neg())
+    }
+}
+
+impl std::ops::Sub for TinySignedInt {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self {
+        self + -rhs
+    }
+}
+
+// just show value (i8) when being asked to display it
+impl std::fmt::Display for TinySignedInt {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 
 
 #[test]
 fn add_two_elems() {
-    let a = TinySignedIntElement::new(4);
-    let b = TinySignedIntElement::new(5);
+    let a = TinySignedInt(4);
+    let b = TinySignedInt(5);
 
-    assert_eq!(a + b, TinySignedIntElement::new(9));
+    assert_eq!(a + b, TinySignedInt(9));
 }
 
 #[test]
 fn identity_does_nothing_example() {
-    let iden = TinySignedInts::identity();
-    let a = TinySignedIntElement::new(5);
+    let iden = TinySignedInt::identity();
+    let a = TinySignedInt(5);
 
     assert_eq!(a + iden, a);
 }
@@ -80,11 +60,11 @@ fn identity_does_nothing_example() {
 
 #[test]
 fn inverse_end() {
-    let ident = TinySignedInts::identity();
-    let a = TinySignedIntElement::new(-128);
+    let ident = TinySignedInt::identity();
+    let a = TinySignedInt(-128);
     // the inverse of -128 for our group is not +128, but -128
     // because in i8 with wrapping: -128 + -128 = 0
-    let inverse = TinySignedInts::inverse(a);
+    let inverse = -a;
 
     assert_eq!(a + inverse, ident);
 }
