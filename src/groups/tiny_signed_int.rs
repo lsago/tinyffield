@@ -74,3 +74,16 @@ fn inverse_end() {
 
     assert_eq!(a + inverse, ident);
 }
+
+#[test]
+fn group_laws() {
+    let elements = [
+        TinySignedInt(-128),
+        TinySignedInt(-1),
+        TinySignedInt(0),
+        TinySignedInt(1),
+        TinySignedInt(127),
+    ];
+
+    crate::group::assert_group_laws(&elements);
+}

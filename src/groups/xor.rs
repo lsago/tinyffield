@@ -75,3 +75,15 @@ fn inverse_end() {
 
     assert_eq!(max + inverse, ident);
 }
+
+#[test]
+fn group_laws() {
+    let elements = [
+        Xor(0),
+        Xor(1),
+        Xor(0b10101010101000100101),
+        Xor(u128::MAX),
+    ];
+
+    crate::group::assert_group_laws(&elements);
+}
