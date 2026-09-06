@@ -3,6 +3,12 @@ use crate::group::Group;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TinySignedInt(i8);
 
+impl TinySignedInt {
+    pub fn new(value: i8) -> Self {
+        Self(value)
+    }
+}
+
 impl Group for TinySignedInt {
     fn identity() -> Self {
         Self(0)
