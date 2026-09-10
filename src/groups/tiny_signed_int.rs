@@ -46,7 +46,6 @@ impl std::fmt::Display for TinySignedIntGroup {
     }
 }
 
-
 #[test]
 fn add_two_elems() {
     let a = TinySignedIntGroup(4);
@@ -62,7 +61,6 @@ fn identity_does_nothing_example() {
 
     assert_eq!(a + iden, a);
 }
-
 
 #[test]
 fn inverse_end() {

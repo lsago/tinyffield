@@ -1,8 +1,6 @@
 use crate::ring::Ring;
 
-pub trait Field:
-    Ring {
-
+pub trait Field: Ring {
     // multiplicative inverse exists for all elements except add identitive
     fn inverse(self) -> Option<Self>;
 }
@@ -26,17 +24,23 @@ where
         if e == add_identity {
             assert_eq!(e.inverse(), None);
         } else {
-            let e_inverse = e.inverse().expect("nonzero element must have a mul inverse");
+            let e_inverse = e
+                .inverse()
+                .expect("nonzero element must have a mul inverse");
             // mul inverses
             assert_eq!(
-                e_inverse * e, mul_identity,
+                e_inverse * e,
+                mul_identity,
                 "Inverse rule \"e^-1 * e\" failed: {:?} * {:?}",
-                e_inverse, e,
+                e_inverse,
+                e,
             );
             assert_eq!(
-                e * e_inverse, mul_identity,
+                e * e_inverse,
+                mul_identity,
                 "Inverse rule \"e * e^-1\" failed: {:?} * {:?}",
-                e, e_inverse,
+                e,
+                e_inverse,
             );
         }
     }
@@ -45,9 +49,11 @@ where
         for &b in elements {
             // commutative for multiplication
             assert_eq!(
-                a * b, b * a,
+                a * b,
+                b * a,
                 "Commutativity rule \"a * b = b * a\" failed: a = {:?}, b = {:?}",
-                a, b,
+                a,
+                b,
             );
         }
     }

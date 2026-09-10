@@ -3,7 +3,6 @@
 /// conditions must hold: the operation is associative, it has an identity
 /// element, and every element of the set has an inverse element"
 /// -- https://en.wikipedia.org/wiki/Group_(mathematics)
-
 // we are going to call the operation of this group "Add", just so we can use
 // "+". But it could be anything.
 use std::ops::{Add, Neg, Sub};
@@ -44,7 +43,7 @@ macro_rules! impl_sub {
                 self + -rhs
             }
         }
-    }
+    };
 }
 
 // generic tests
@@ -58,28 +57,35 @@ where
     for &e in elements {
         // identity does nothing
         assert_eq!(
-            identity + e, e,
+            identity + e,
+            e,
             "Identity rule \"identity + e\" failed: {:?} + {:?}",
-            identity, e,
+            identity,
+            e,
         );
         assert_eq!(
-            e + identity, e,
+            e + identity,
+            e,
             "Identity rule \"e + identity\" failed: {:?} + {:?}",
-            e, identity,
+            e,
+            identity,
         );
 
         // inverse
         assert_eq!(
-            -e + e, identity,
+            -e + e,
+            identity,
             "Inverse rule \"-e + e\" failed: {:?} + {:?}",
-            -e, e,
+            -e,
+            e,
         );
         assert_eq!(
-            e + -e, identity,
+            e + -e,
+            identity,
             "Inverse rule \"e + -e\" failed: {:?} + {:?}",
-            e, -e,
+            e,
+            -e,
         );
-
     }
 
     for &a in elements {
@@ -87,9 +93,12 @@ where
             for &c in elements {
                 // associativity
                 assert_eq!(
-                    (a + b) + c, a + (b + c),
+                    (a + b) + c,
+                    a + (b + c),
                     "Associativity rule \"(a + b) + c = a + (b + c)\" failed: a = {:?}, b = {:?}, c = {:?}",
-                    a, b, c,
+                    a,
+                    b,
+                    c,
                 );
             }
         }

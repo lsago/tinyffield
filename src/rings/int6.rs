@@ -10,7 +10,6 @@ impl Int6Ring {
         // maybe we should not allow values above 5
         Self(value % MODULO)
     }
-
 }
 
 impl Group for Int6Ring {
@@ -33,7 +32,6 @@ impl std::ops::Add for Int6Ring {
         Self((self.0 + rhs.0) % MODULO)
     }
 }
-
 
 // inverse for additive op
 impl std::ops::Neg for Int6Ring {

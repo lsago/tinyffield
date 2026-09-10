@@ -5,7 +5,12 @@ fn main() {
     let tiny_signed_a = TinySignedIntGroup::new(4);
     let tiny_signed_b = TinySignedIntGroup::new(5);
     println!("Group: tiny signed int:");
-    println!("\tResult of {} ⊕ {} = {}", tiny_signed_a, tiny_signed_b, tiny_signed_a + tiny_signed_b);
+    println!(
+        "\tResult of {} ⊕ {} = {}",
+        tiny_signed_a,
+        tiny_signed_b,
+        tiny_signed_a + tiny_signed_b
+    );
 
     let xor_a = XorGroup::new(0b010100100100110101001u128);
     let xor_b = XorGroup::new(0b101110110110100101011u128);

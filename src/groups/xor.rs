@@ -24,7 +24,6 @@ impl std::ops::Add for XorGroup {
     }
 }
 
-
 // inverse
 impl std::ops::Neg for XorGroup {
     type Output = Self;
@@ -50,13 +49,15 @@ impl std::fmt::Display for XorGroup {
     }
 }
 
-
 #[test]
 fn op_two_elems() {
     let a = XorGroup(0b10100101010101011010101010011000100101u128);
     let b = XorGroup(0b00110101000111011010101010001000100010u128);
 
-    assert_eq!(a + b, XorGroup(0b10010000010010000000000000010000000111u128));
+    assert_eq!(
+        a + b,
+        XorGroup(0b10010000010010000000000000010000000111u128)
+    );
 }
 
 #[test]
