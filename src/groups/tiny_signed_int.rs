@@ -10,7 +10,7 @@ impl TinySignedInt {
 }
 
 impl Group for TinySignedInt {
-    fn identity() -> Self {
+    fn zero() -> Self {
         Self(0)
     }
 }
@@ -57,7 +57,7 @@ fn add_two_elems() {
 
 #[test]
 fn identity_does_nothing_example() {
-    let iden = TinySignedInt::identity();
+    let iden = TinySignedInt::zero();
     let a = TinySignedInt(5);
 
     assert_eq!(a + iden, a);
@@ -66,7 +66,7 @@ fn identity_does_nothing_example() {
 
 #[test]
 fn inverse_end() {
-    let ident = TinySignedInt::identity();
+    let ident = TinySignedInt::zero();
     let a = TinySignedInt(-128);
     // the inverse of -128 for our group is not +128, but -128
     // because in i8 with wrapping: -128 + -128 = 0

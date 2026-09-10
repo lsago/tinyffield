@@ -19,7 +19,7 @@ pub trait Group:
     // conveiniece: Add Neg
     + Sub<Output = Self> {
     // identity element exists
-    fn identity() -> Self;
+    fn zero() -> Self;
 }
 
 // Unfortunatelly, I'm not sure there's a way in Rust to provide this
@@ -53,7 +53,7 @@ pub(crate) fn assert_group_laws<G>(elements: &[G])
 where
     G: Group + Copy + Eq + std::fmt::Debug,
 {
-    let identity = G::identity();
+    let identity = G::zero();
 
     for &e in elements {
         // identity does nothing

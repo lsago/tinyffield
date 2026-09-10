@@ -10,7 +10,7 @@ impl Xor {
 }
 
 impl Group for Xor {
-    fn identity() -> Self {
+    fn zero() -> Self {
         Self(0)
     }
 }
@@ -61,7 +61,7 @@ fn op_two_elems() {
 
 #[test]
 fn identity_does_nothing_example() {
-    let iden = Xor::identity();
+    let iden = Xor::zero();
     let a = Xor(0b10010000010010000000000000010000000111u128);
 
     assert_eq!(a + iden, a);
@@ -69,7 +69,7 @@ fn identity_does_nothing_example() {
 
 #[test]
 fn inverse_end() {
-    let ident = Xor::identity();
+    let ident = Xor::zero();
     let max = Xor(u128::MAX);
     let inverse = -max;
 
