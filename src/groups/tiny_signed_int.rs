@@ -1,21 +1,21 @@
 use crate::group::Group;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TinySignedInt(i8);
+pub struct TinySignedIntGroup(i8);
 
-impl TinySignedInt {
+impl TinySignedIntGroup {
     pub fn new(value: i8) -> Self {
         Self(value)
     }
 }
 
-impl Group for TinySignedInt {
+impl Group for TinySignedIntGroup {
     fn zero() -> Self {
         Self(0)
     }
 }
 
-impl std::ops::Add for TinySignedInt {
+impl std::ops::Add for TinySignedIntGroup {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self {
@@ -23,7 +23,7 @@ impl std::ops::Add for TinySignedInt {
     }
 }
 
-impl std::ops::Neg for TinySignedInt {
+impl std::ops::Neg for TinySignedIntGroup {
     type Output = Self;
 
     fn neg(self) -> Self {
@@ -31,7 +31,7 @@ impl std::ops::Neg for TinySignedInt {
     }
 }
 
-impl std::ops::Sub for TinySignedInt {
+impl std::ops::Sub for TinySignedIntGroup {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self {
@@ -40,7 +40,7 @@ impl std::ops::Sub for TinySignedInt {
 }
 
 // just show value (i8) when being asked to display it
-impl std::fmt::Display for TinySignedInt {
+impl std::fmt::Display for TinySignedIntGroup {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -49,16 +49,16 @@ impl std::fmt::Display for TinySignedInt {
 
 #[test]
 fn add_two_elems() {
-    let a = TinySignedInt(4);
-    let b = TinySignedInt(5);
+    let a = TinySignedIntGroup(4);
+    let b = TinySignedIntGroup(5);
 
-    assert_eq!(a + b, TinySignedInt(9));
+    assert_eq!(a + b, TinySignedIntGroup(9));
 }
 
 #[test]
 fn identity_does_nothing_example() {
-    let iden = TinySignedInt::zero();
-    let a = TinySignedInt(5);
+    let iden = TinySignedIntGroup::zero();
+    let a = TinySignedIntGroup(5);
 
     assert_eq!(a + iden, a);
 }
@@ -66,8 +66,8 @@ fn identity_does_nothing_example() {
 
 #[test]
 fn inverse_end() {
-    let ident = TinySignedInt::zero();
-    let a = TinySignedInt(-128);
+    let ident = TinySignedIntGroup::zero();
+    let a = TinySignedIntGroup(-128);
     // the inverse of -128 for our group is not +128, but -128
     // because in i8 with wrapping: -128 + -128 = 0
     let inverse = -a;
@@ -78,11 +78,11 @@ fn inverse_end() {
 #[test]
 fn group_laws() {
     let elements = [
-        TinySignedInt(-128),
-        TinySignedInt(-1),
-        TinySignedInt(0),
-        TinySignedInt(1),
-        TinySignedInt(127),
+        TinySignedIntGroup(-128),
+        TinySignedIntGroup(-1),
+        TinySignedIntGroup(0),
+        TinySignedIntGroup(1),
+        TinySignedIntGroup(127),
     ];
 
     crate::group::assert_group_laws(&elements);

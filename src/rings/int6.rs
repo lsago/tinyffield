@@ -3,9 +3,9 @@ use crate::{group::Group, ring::Ring};
 const MODULO: u8 = 6;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Int6(u8);
+pub struct Int6Ring(u8);
 
-impl Int6 {
+impl Int6Ring {
     pub fn new(value: u8) -> Self {
         // maybe we should not allow values above 5
         Self(value % MODULO)
@@ -13,20 +13,20 @@ impl Int6 {
 
 }
 
-impl Group for Int6 {
+impl Group for Int6Ring {
     fn zero() -> Self {
         Self(0)
     }
 }
 
-impl Ring for Int6 {
+impl Ring for Int6Ring {
     fn one() -> Self {
         Self(1)
     }
 }
 
 // op
-impl std::ops::Add for Int6 {
+impl std::ops::Add for Int6Ring {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self {
@@ -36,7 +36,7 @@ impl std::ops::Add for Int6 {
 
 
 // inverse for additive op
-impl std::ops::Neg for Int6 {
+impl std::ops::Neg for Int6Ring {
     type Output = Self;
 
     fn neg(self) -> Self {
@@ -45,7 +45,7 @@ impl std::ops::Neg for Int6 {
     }
 }
 
-impl std::ops::Sub for Int6 {
+impl std::ops::Sub for Int6Ring {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self {
@@ -53,7 +53,7 @@ impl std::ops::Sub for Int6 {
     }
 }
 
-impl std::ops::Mul for Int6 {
+impl std::ops::Mul for Int6Ring {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self {
@@ -62,7 +62,7 @@ impl std::ops::Mul for Int6 {
 }
 
 // just show value (i8) when being asked to display it
-impl std::fmt::Display for Int6 {
+impl std::fmt::Display for Int6Ring {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -71,12 +71,12 @@ impl std::fmt::Display for Int6 {
 #[test]
 fn ring_laws() {
     let elements = [
-        Int6(0),
-        Int6(1),
-        Int6(2),
-        Int6(3),
-        Int6(4),
-        Int6(5),
+        Int6Ring(0),
+        Int6Ring(1),
+        Int6Ring(2),
+        Int6Ring(3),
+        Int6Ring(4),
+        Int6Ring(5),
     ];
 
     crate::ring::assert_ring_laws(&elements);
