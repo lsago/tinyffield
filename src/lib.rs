@@ -5,3 +5,4 @@ pub mod ring;
 pub mod rings;
 
 pub mod field;
+pub mod fields;
