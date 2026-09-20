@@ -1,4 +1,4 @@
-use crate::{group::Group, ring::Ring, field::Field};
+use crate::{field::Field, group::Group, monoid::Monoid, ring::Ring};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct GF2Field(bool);
@@ -9,11 +9,13 @@ impl GF2Field {
     }
 }
 
-impl Group for GF2Field {
+impl Monoid for GF2Field {
     fn zero() -> Self {
         Self(false)
     }
 }
+
+impl Group for GF2Field {}
 
 impl Ring for GF2Field {
     fn one() -> Self {
@@ -71,10 +73,7 @@ impl std::fmt::Display for GF2Field {
 
 #[test]
 fn field_laws() {
-    let elements = [
-        GF2Field(false),
-        GF2Field(true),
-    ];
+    let elements = [GF2Field(false), GF2Field(true)];
 
     crate::field::assert_field_laws(&elements);
 }

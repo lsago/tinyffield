@@ -1,4 +1,4 @@
-use crate::{group::Group, ring::Ring};
+use crate::{group::Group, monoid::Monoid, ring::Ring};
 
 const MODULO: u8 = 6;
 
@@ -12,11 +12,13 @@ impl Int6Ring {
     }
 }
 
-impl Group for Int6Ring {
+impl Monoid for Int6Ring {
     fn zero() -> Self {
         Self(0)
     }
 }
+
+impl Group for Int6Ring {}
 
 impl Ring for Int6Ring {
     fn one() -> Self {

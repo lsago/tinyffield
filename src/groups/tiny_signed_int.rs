@@ -1,4 +1,4 @@
-use crate::group::Group;
+use crate::{group::Group, monoid::Monoid};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TinySignedIntGroup(i8);
@@ -9,11 +9,13 @@ impl TinySignedIntGroup {
     }
 }
 
-impl Group for TinySignedIntGroup {
+impl Monoid for TinySignedIntGroup {
     fn zero() -> Self {
         Self(0)
     }
 }
+
+impl Group for TinySignedIntGroup {}
 
 impl std::ops::Add for TinySignedIntGroup {
     type Output = Self;

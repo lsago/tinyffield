@@ -1,4 +1,4 @@
-use crate::group::Group;
+use crate::{group::Group, monoid::Monoid};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct XorGroup(u128);
@@ -9,11 +9,13 @@ impl XorGroup {
     }
 }
 
-impl Group for XorGroup {
+impl Monoid for XorGroup {
     fn zero() -> Self {
         Self(0)
     }
 }
+
+impl Group for XorGroup {}
 
 // op
 impl std::ops::Add for XorGroup {

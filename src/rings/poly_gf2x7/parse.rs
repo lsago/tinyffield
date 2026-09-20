@@ -1,13 +1,20 @@
-use super::{PolyGF2x7, MAX_DEGREE};
-use crate::{fields::gf2::GF2Field, group::Group, ring::Ring};
+use super::{MAX_DEGREE, PolyGF2x7};
+use crate::{fields::gf2::GF2Field, monoid::Monoid, ring::Ring};
 use std::iter::Peekable;
 
 struct ParsedTerm<T> {
     coeff: T,
     inverse: bool,
-    exp: usize
+    exp: usize,
 }
 
+/// Parse ASCII digits consuming them from `chars` iterator.
+///
+/// Returns `Ok(None)` if no digits are present
+///
+/// # Errors
+///
+/// Returns an error if integer represented doesn't fit into `usize`.
 fn parse_decimal(chars: &mut Peekable<std::str::Chars<'_>>) -> Result<Option<usize>, &'static str> {
     let mut dec = 0usize;
 
@@ -17,7 +24,6 @@ fn parse_decimal(chars: &mut Peekable<std::str::Chars<'_>>) -> Result<Option<usi
 
     while chars.peek().is_some_and(|s| s.is_ascii_digit()) {
         let digit = chars.next().unwrap().to_digit(10).unwrap() as usize;
-        // dec = dec * 10 + chars.next().unwrap().to_digit(10).unwrap();
         dec = dec
             .checked_mul(10)
             .and_then(|n| n.checked_add(digit))
@@ -33,7 +39,7 @@ fn parse_term(t: &str) -> Result<ParsedTerm<GF2Field>, &'static str> {
     let mut parsed = ParsedTerm {
         coeff: GF2Field::zero(),
         inverse: false,
-        exp: 0
+        exp: 0,
     };
 
     // consume optional sign
@@ -74,14 +80,14 @@ fn parse_term(t: &str) -> Result<ParsedTerm<GF2Field>, &'static str> {
     parsed.exp = parse_decimal(&mut chars)?.ok_or("Parsing error: expected number after ^")?;
 
     if chars.peek().is_some() {
-        return Err("Parse error: characters not allowed after decimal in exponent")
+        return Err("Parse error: characters not allowed after decimal in exponent");
     }
 
     Ok(parsed)
 }
 
 impl std::str::FromStr for PolyGF2x7 {
-    type Err =  &'static str;
+    type Err = &'static str;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut bin_coeffs = 0u8;

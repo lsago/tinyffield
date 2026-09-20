@@ -1,3 +1,6 @@
+pub mod monoid;
+pub mod monoids;
+
 pub mod group;
 pub mod groups;
 

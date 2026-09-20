@@ -5,20 +5,19 @@
 /// -- https://en.wikipedia.org/wiki/Group_(mathematics)
 // we are going to call the operation of this group "Add", just so we can use
 // "+". But it could be anything.
-use std::ops::{Add, Neg, Sub};
+use std::ops::{Neg, Sub};
+
+use crate::monoid::Monoid;
 
 // Implementing this trait does not mean it's actually a group, just that you
 // can use it as such if it actually is a group
 pub trait Group:
     Sized
-    // binary operation
-    + Add<Output = Self>
+    + Monoid
     // inverse
     + Neg<Output = Self>
     // conveiniece: Add Neg
     + Sub<Output = Self> {
-    // identity element exists
-    fn zero() -> Self;
 }
 
 // Unfortunatelly, I'm not sure there's a way in Rust to provide this
@@ -54,23 +53,10 @@ where
 {
     let identity = G::zero();
 
-    for &e in elements {
-        // identity does nothing
-        assert_eq!(
-            identity + e,
-            e,
-            "Identity rule \"identity + e\" failed: {:?} + {:?}",
-            identity,
-            e,
-        );
-        assert_eq!(
-            e + identity,
-            e,
-            "Identity rule \"e + identity\" failed: {:?} + {:?}",
-            e,
-            identity,
-        );
+    // must also satisfy laws of monoids
+    crate::monoid::assert_monoid_laws(&elements);
 
+    for &e in elements {
         // inverse
         assert_eq!(
             -e + e,
@@ -86,21 +72,5 @@ where
             e,
             -e,
         );
-    }
-
-    for &a in elements {
-        for &b in elements {
-            for &c in elements {
-                // associativity
-                assert_eq!(
-                    (a + b) + c,
-                    a + (b + c),
-                    "Associativity rule \"(a + b) + c = a + (b + c)\" failed: a = {:?}, b = {:?}, c = {:?}",
-                    a,
-                    b,
-                    c,
-                );
-            }
-        }
     }
 }

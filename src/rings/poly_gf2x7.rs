@@ -1,8 +1,7 @@
 /// Polynomials in x, with coefficients from GF(2). Modulo x^7.
 ///   GF(2)[x]/(x^7)
 /// Since x^7 is not irreducible, this is not a field.
-
-use crate::{group::Group, ring::Ring};
+use crate::{group::Group, monoid::Monoid, ring::Ring};
 
 mod parse;
 
@@ -18,11 +17,13 @@ impl PolyGF2x7 {
     }
 }
 
-impl Group for PolyGF2x7 {
+impl Monoid for PolyGF2x7 {
     fn zero() -> Self {
         Self(0)
     }
 }
+
+impl Group for PolyGF2x7 {}
 
 impl Ring for PolyGF2x7 {
     fn one() -> Self {
@@ -119,7 +120,8 @@ fn ring_laws() {
         PolyGF2x7::from_str("x^2 + 1"),
         PolyGF2x7::from_str("x^6 + x^5 + x^4 + x^3 + x^2 + x + 1"),
         PolyGF2x7::from_str("x^9 + 1"),
-    ].map(Result::unwrap);
+    ]
+    .map(Result::unwrap);
 
     crate::ring::assert_ring_laws(&elements);
 }
