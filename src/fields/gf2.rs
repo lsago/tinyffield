@@ -75,5 +75,5 @@ impl std::fmt::Display for GF2Field {
 fn field_laws() {
     let elements = [GF2Field(false), GF2Field(true)];
 
-    crate::field::assert_field_laws(&elements);
+    Field::assert_laws(&elements);
 }

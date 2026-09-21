@@ -16,6 +16,14 @@ pub trait Monoid:
     + Add<Output = Self> {
     // identity element exists
     fn zero() -> Self;
+
+    #[cfg(test)]
+    fn assert_laws(elements: &[Self])
+    where
+        Self: Copy + Eq + std::fmt::Debug,
+    {
+        assert_monoid_laws(elements);
+    }
 }
 
 // generic tests

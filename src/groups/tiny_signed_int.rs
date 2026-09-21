@@ -85,5 +85,5 @@ fn group_laws() {
         TinySignedIntGroup(127),
     ];
 
-    crate::group::assert_group_laws(&elements);
+    Group::assert_laws(&elements);
 }

@@ -123,5 +123,5 @@ fn ring_laws() {
     ]
     .map(Result::unwrap);
 
-    crate::ring::assert_ring_laws(&elements);
+    Ring::assert_laws(&elements);
 }

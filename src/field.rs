@@ -3,6 +3,14 @@ use crate::ring::Ring;
 pub trait Field: Ring {
     // multiplicative inverse exists for all elements except add identitive
     fn inverse(self) -> Option<Self>;
+
+    #[cfg(test)]
+    fn assert_laws(elements: &[Self])
+    where
+        Self: Copy + Eq + std::fmt::Debug,
+    {
+        assert_field_laws(elements);
+    }
 }
 
 // generic tests

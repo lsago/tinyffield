@@ -88,5 +88,5 @@ fn group_laws() {
         XorGroup(u128::MAX),
     ];
 
-    crate::group::assert_group_laws(&elements);
+    Group::assert_laws(&elements);
 }

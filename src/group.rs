@@ -18,6 +18,13 @@ pub trait Group:
     + Neg<Output = Self>
     // conveiniece: Add Neg
     + Sub<Output = Self> {
+    #[cfg(test)]
+    fn assert_laws(elements: &[Self])
+    where
+        Self: Copy + Eq + std::fmt::Debug,
+    {
+        assert_group_laws(elements);
+    }
 }
 
 // Unfortunatelly, I'm not sure there's a way in Rust to provide this

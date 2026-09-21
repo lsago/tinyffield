@@ -7,6 +7,14 @@ pub trait Ring: Group + Mul<Output = Self> {
     fn one() -> Self;
     // additive identity we inherit from Group: zero()
     // group don't require a multiplicative inverse
+
+    #[cfg(test)]
+    fn assert_laws(elements: &[Self])
+    where
+        Self: Copy + Eq + std::fmt::Debug,
+    {
+        assert_ring_laws(elements);
+    }
 }
 
 // generic tests

@@ -79,5 +79,5 @@ fn ring_laws() {
         Int6Ring(5),
     ];
 
-    crate::ring::assert_ring_laws(&elements);
+    Ring::assert_laws(&elements);
 }

@@ -51,5 +51,5 @@ fn monoid_laws() {
         OrMonoid(u128::MAX),
     ];
 
-    crate::monoid::assert_monoid_laws(&elements);
+    OrMonoid::assert_laws(&elements);
 }
