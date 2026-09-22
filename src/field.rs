@@ -7,7 +7,7 @@ pub trait Field: Ring {
     #[cfg(test)]
     fn assert_laws(elements: &[Self])
     where
-        Self: Copy + Eq + std::fmt::Debug,
+        Self: Clone + Eq + std::fmt::Debug,
     {
         assert_field_laws(elements);
     }
@@ -17,7 +17,7 @@ pub trait Field: Ring {
 #[cfg(test)]
 pub(crate) fn assert_field_laws<F>(elements: &[F])
 where
-    F: Field + Copy + Eq + std::fmt::Debug,
+    F: Field + Clone + Eq + std::fmt::Debug,
 {
     let add_identity = F::zero();
     let mul_identity = F::one();
@@ -28,23 +28,24 @@ where
     // 0 != 1
     assert_ne!(add_identity, mul_identity);
 
-    for &e in elements {
-        if e == add_identity {
-            assert_eq!(e.inverse(), None);
+    for e in elements {
+        if e == &add_identity {
+            assert_eq!(e.clone().inverse(), None);
         } else {
             let e_inverse = e
+                .clone()
                 .inverse()
                 .expect("nonzero element must have a mul inverse");
             // mul inverses
             assert_eq!(
-                e_inverse * e,
+                e_inverse.clone() * e.clone(),
                 mul_identity,
                 "Inverse rule \"e^-1 * e\" failed: {:?} * {:?}",
                 e_inverse,
                 e,
             );
             assert_eq!(
-                e * e_inverse,
+                e.clone() * e_inverse.clone(),
                 mul_identity,
                 "Inverse rule \"e * e^-1\" failed: {:?} * {:?}",
                 e,
@@ -53,12 +54,12 @@ where
         }
     }
 
-    for &a in elements {
-        for &b in elements {
+    for a in elements {
+        for b in elements {
             // commutative for multiplication
             assert_eq!(
-                a * b,
-                b * a,
+                a.clone() * b.clone(),
+                b.clone() * a.clone(),
                 "Commutativity rule \"a * b = b * a\" failed: a = {:?}, b = {:?}",
                 a,
                 b,

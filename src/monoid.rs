@@ -20,7 +20,7 @@ pub trait Monoid:
     #[cfg(test)]
     fn assert_laws(elements: &[Self])
     where
-        Self: Copy + Eq + std::fmt::Debug,
+        Self: Clone + Eq + std::fmt::Debug,
     {
         assert_monoid_laws(elements);
     }
@@ -30,35 +30,35 @@ pub trait Monoid:
 #[cfg(test)]
 pub(crate) fn assert_monoid_laws<M>(elements: &[M])
 where
-    M: Monoid + Copy + Eq + std::fmt::Debug,
+    M: Monoid + Clone + Eq + std::fmt::Debug,
 {
     let identity = M::zero();
 
-    for &e in elements {
+    for e in elements {
         // identity does nothing
         assert_eq!(
-            identity + e,
-            e,
+            identity.clone() + e.clone(),
+            *e,
             "Identity rule \"identity + e\" failed: {:?} + {:?}",
             identity,
             e,
         );
         assert_eq!(
-            e + identity,
-            e,
+            e.clone() + identity.clone(),
+            *e,
             "Identity rule \"e + identity\" failed: {:?} + {:?}",
             e,
             identity,
         );
     }
 
-    for &a in elements {
-        for &b in elements {
-            for &c in elements {
+    for a in elements {
+        for b in elements {
+            for c in elements {
                 // associativity
                 assert_eq!(
-                    (a + b) + c,
-                    a + (b + c),
+                    (a.clone() + b.clone()) + c.clone(),
+                    a.clone() + (b.clone() + c.clone()),
                     "Associativity rule \"(a + b) + c = a + (b + c)\" failed: a = {:?}, b = {:?}, c = {:?}",
                     a,
                     b,

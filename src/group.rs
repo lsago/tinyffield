@@ -21,7 +21,7 @@ pub trait Group:
     #[cfg(test)]
     fn assert_laws(elements: &[Self])
     where
-        Self: Copy + Eq + std::fmt::Debug,
+        Self: Clone + Eq + std::fmt::Debug,
     {
         assert_group_laws(elements);
     }
@@ -56,28 +56,28 @@ macro_rules! impl_sub {
 #[cfg(test)]
 pub(crate) fn assert_group_laws<G>(elements: &[G])
 where
-    G: Group + Copy + Eq + std::fmt::Debug,
+    G: Group + Clone + Eq + std::fmt::Debug,
 {
     let identity = G::zero();
 
     // must also satisfy laws of monoids
     crate::monoid::assert_monoid_laws(&elements);
 
-    for &e in elements {
+    for e in elements {
         // inverse
         assert_eq!(
-            -e + e,
+            -e.clone() + e.clone(),
             identity,
             "Inverse rule \"-e + e\" failed: {:?} + {:?}",
-            -e,
+            -e.clone(),
             e,
         );
         assert_eq!(
-            e + -e,
+            e.clone() + -e.clone(),
             identity,
             "Inverse rule \"e + -e\" failed: {:?} + {:?}",
             e,
-            -e,
+            -e.clone(),
         );
     }
 }

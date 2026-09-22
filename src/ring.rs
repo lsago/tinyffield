@@ -11,7 +11,7 @@ pub trait Ring: Group + Mul<Output = Self> {
     #[cfg(test)]
     fn assert_laws(elements: &[Self])
     where
-        Self: Copy + Eq + std::fmt::Debug,
+        Self: Clone + Eq + std::fmt::Debug,
     {
         assert_ring_laws(elements);
     }
@@ -21,47 +21,47 @@ pub trait Ring: Group + Mul<Output = Self> {
 #[cfg(test)]
 pub(crate) fn assert_ring_laws<R>(elements: &[R])
 where
-    R: Ring + Copy + Eq + std::fmt::Debug,
+    R: Ring + Clone + Eq + std::fmt::Debug,
 {
     let identity = R::one();
 
     // must be a group under +
     crate::group::assert_group_laws(&elements);
 
-    for &e in elements {
+    for e in elements {
         // identity does nothing
         assert_eq!(
-            identity * e,
-            e,
+            identity.clone() * e.clone(),
+            *e,
             "Identity rule \"identity * e\" failed: {:?} * {:?}",
             identity,
             e,
         );
         assert_eq!(
-            e * identity,
-            e,
+            e.clone() * identity.clone(),
+            *e,
             "Identity rule \"e * identity\" failed: {:?} * {:?}",
             e,
             identity,
         );
     }
 
-    for &a in elements {
-        for &b in elements {
+    for a in elements {
+        for b in elements {
             // commutative group under addition (abelian group)
             assert_eq!(
-                a + b,
-                b + a,
+                a.clone() + b.clone(),
+                b.clone() + a.clone(),
                 "Commutativity rule \"a + b = b + a\" failed: a = {:?}, b = {:?}",
                 a,
                 b,
             );
 
-            for &c in elements {
+            for c in elements {
                 // associativity for multiplication
                 assert_eq!(
-                    (a * b) * c,
-                    a * (b * c),
+                    (a.clone() * b.clone()) * c.clone(),
+                    a.clone() * (b.clone() * c.clone()),
                     "Associativity rule \"(a * b) * c = a * (b * c)\" failed: a = {:?}, b = {:?}, c = {:?}",
                     a,
                     b,
@@ -70,16 +70,16 @@ where
 
                 // multiplication distributes under addition
                 assert_eq!(
-                    a * (b + c),
-                    (a * b + a * c),
+                    a.clone() * (b.clone() + c.clone()),
+                    (a.clone() * b.clone() + a.clone() * c.clone()),
                     "Left distributivity rule failed: a = {:?}, b = {:?}, c = {:?}",
                     a,
                     b,
                     c,
                 );
                 assert_eq!(
-                    (a + b) * c,
-                    (a * c + b * c),
+                    (a.clone() + b.clone()) * c.clone(),
+                    (a.clone() * c.clone() + b.clone() * c.clone()),
                     "Right distributivity rule failed: a = {:?}, b = {:?}, c = {:?}",
                     a,
                     b,
