@@ -162,6 +162,20 @@ impl PolyGF2AES {
             reduce(polygf2.lsb_u16(), MODULUS).ok_or("Error reducing")?,
         ))
     }
+
+    pub fn sbox(self) -> Self {
+        // Section 5.2
+        let b = self.inverse().map_or_else(|| 0, |v| v.0);
+
+        // Section 5.3, affine transformation
+        Self(
+            b ^ b.rotate_right(4)
+                ^ b.rotate_right(5)
+                ^ b.rotate_right(6)
+                ^ b.rotate_right(7)
+                ^ 0b01100011,
+        )
+    }
 }
 
 impl Monoid for PolyGF2AES {
