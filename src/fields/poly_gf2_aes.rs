@@ -1,4 +1,4 @@
-use crate::{field::Field, group::Group, monoid::Monoid, ring::Ring, rings::poly_gf2::{PolyGF2, parse}};
+use crate::{field::Field, group::Group, monoid::Monoid, ring::Ring, rings::poly_gf2::PolyGF2};
 
 /// The AES field GF(2^8), using the modulus x^8 + x^4 + x^3 + x + 1.
 /// Bit i represents the coefficient of x^i.
