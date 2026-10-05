@@ -153,13 +153,15 @@ impl PolyGF2AES {
         let polygf2_deg = polygf2.degree().unwrap();
 
         if polygf2_deg >= u16::BITS as usize {
-            return Err("Reducing input polynomials of degree 15 or higher is not curretly implemented")
+            return Err(
+                "Reducing input polynomials of degree 15 or higher is not curretly implemented",
+            );
         }
 
         Ok(Self(
-            reduce(polygf2.lsb_u16(), MODULUS).ok_or("Error reducing")?
+            reduce(polygf2.lsb_u16(), MODULUS).ok_or("Error reducing")?,
         ))
-  }
+    }
 }
 
 impl Monoid for PolyGF2AES {
@@ -198,7 +200,7 @@ impl std::ops::Neg for PolyGF2AES {
     type Output = Self;
 
     fn neg(self) -> Self {
-       self
+        self
     }
 }
 
@@ -232,7 +234,6 @@ impl std::ops::Mul for PolyGF2AES {
 
         Self(reduce(p, MODULUS).unwrap())
     }
-
 }
 
 impl std::fmt::Display for PolyGF2AES {
