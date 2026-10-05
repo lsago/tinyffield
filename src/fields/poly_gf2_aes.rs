@@ -1,4 +1,4 @@
-use crate::{field::Field, group::Group, monoid::Monoid, ring::Ring};
+use crate::{field::Field, group::Group, monoid::Monoid, ring::Ring, rings::poly_gf2::{PolyGF2, parse}};
 
 /// The AES field GF(2^8), using the modulus x^8 + x^4 + x^3 + x + 1.
 /// Bit i represents the coefficient of x^i.
@@ -144,6 +144,22 @@ impl PolyGF2AES {
     pub fn new(value: u8) -> Self {
         Self(value)
     }
+
+    pub fn new_from_poly_str(s: &str) -> Result<Self, &'static str> {
+        let polygf2: PolyGF2 = s.parse()?;
+        // PolyGF2 is a _ring_. Coeffs are in GF(2), but the whole thing (poly)
+        // is a ring.
+
+        let polygf2_deg = polygf2.degree().unwrap();
+
+        if polygf2_deg >= u16::BITS as usize {
+            return Err("Reducing input polynomials of degree 15 or higher is not curretly implemented")
+        }
+
+        Ok(Self(
+            reduce(polygf2.lsb_u16(), MODULUS).ok_or("Error reducing")?
+        ))
+  }
 }
 
 impl Monoid for PolyGF2AES {
@@ -221,7 +237,7 @@ impl std::ops::Mul for PolyGF2AES {
 
 impl std::fmt::Display for PolyGF2AES {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        write!(f, "{:02x}", self.0)
     }
 }
 
@@ -229,6 +245,8 @@ impl std::str::FromStr for PolyGF2AES {
     type Err = &'static str;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        todo!()
+        u8::from_str_radix(s, 16)
+            .map(Self)
+            .map_err(|_| "invalid hex byte")
     }
 }

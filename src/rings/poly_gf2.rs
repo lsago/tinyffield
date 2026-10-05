@@ -4,7 +4,7 @@
 use crate::{group::Group, monoid::Monoid, ring::Ring};
 
 mod display;
-pub(super) mod parse;
+pub(crate) mod parse;
 
 /// We represent our bitfield with a vector of u64s. u64s containing MSB towards
 /// the end of the vec, LSB at the beginning.
@@ -89,6 +89,10 @@ impl PolyGF2 {
         }
 
         total
+    }
+
+    pub fn lsb_u16(&self) -> u16 {
+        self.0[0] as u16
     }
 }
 
