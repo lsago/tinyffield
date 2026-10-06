@@ -150,7 +150,9 @@ impl PolyGF2AES {
         // PolyGF2 is a _ring_. Coeffs are in GF(2), but the whole thing (poly)
         // is a ring.
 
-        let polygf2_deg = polygf2.degree().unwrap();
+        let Some(polygf2_deg) = polygf2.degree() else {
+            return Ok(Self::zero());
+        };
 
         if polygf2_deg >= u16::BITS as usize {
             return Err(
@@ -264,4 +266,24 @@ impl std::str::FromStr for PolyGF2AES {
             .map(Self)
             .map_err(|_| "invalid hex byte")
     }
+}
+
+#[test]
+fn field_laws() {
+    let elements = [
+        PolyGF2AES::new_from_poly_str("0"),
+        PolyGF2AES::new_from_poly_str("x"),
+        PolyGF2AES::new_from_poly_str("x + 1"),
+        PolyGF2AES::new_from_poly_str("x^2 + 1"),
+        PolyGF2AES::new_from_poly_str("x^6 + x^5 + x^4 + x^3 + x^2 + x + 1"),
+        Ok(PolyGF2AES::new(0xff)),
+        Ok(PolyGF2AES::new(0xf0)),
+        Ok(PolyGF2AES::new(0xde)),
+        Ok(PolyGF2AES::new(0xad)),
+        Ok(PolyGF2AES::new(0xbe)),
+        Ok(PolyGF2AES::new(0xef)),
+    ]
+    .map(Result::unwrap);
+
+    Field::assert_laws(&elements);
 }
